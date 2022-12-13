@@ -1,0 +1,80 @@
+---
+title: "Shea CS442 HW3"
+author: "Ryan Shea"
+date: "10/18/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+I pledge my honor that I have abided by the Stevens Honor System.
+
+\newpage
+
+Consider a relational database about hotels, customers (guests) and their bookings that are maintained by an online hotel booking company. The database consists of the following tables (where the primary keys are underlined): 
+
+ - Hotel (\underline{hId}, hName, hAddress, hCity) 
+ - Guest(\underline{gId}, gName, gAddress, gCity, gState) 
+ - Room(\underline{hId}, \underline{roomN}, type, price) 
+ - Booking(\underline{gId}, \underline{hId}, \underline{roomN}, \underline{fromDate} year, noOfDays)
+
+The Booking relation indicates that a guest booked a hotel room for a specified number of days (noOfDays) starting from fromDate of a given year. For instance, a tuple < g12345, “Westin”, 220, 01/05/2022, 2022, 8> in Booking indicates that guest g12345 booked room 220 of the Westin hotel for 8 days starting on Jan 5, 2022. The attribute "gAddress" records the home address of the guests. 
+
+ Write the following queries in __relational algebra expressions__:
+
+1. Return the name of the guests who are Florida residents (i.e., gState=’Florida’) and booked the W hotel in Hoboken (i.e., hName= ‘W hotel’ and hCity=’Hoboken’)
+
+$$ \pi_{gName}\ (\sigma_{gState = 'Florida'}\ (Guest) \Join (\sigma_{hName='W\ hotel'\ \wedge\  hCity='Hoboken'}\ (Hotel) \Join Booking)) $$
+
+
+2. Return the name of the guests who live in Hoboken (i.e., gCity=’Hoboken’) and booked a suite hotel room (i.e., type=’suite’) at W hotel in Hoboken.
+
+$$ \pi_{gName}\ (\sigma_{gCity=’Hoboken’}\ (\sigma_{type=’suite’}(Room) \Join \sigma_{hName='W\ hotel'\ \wedge\  hCity='Hoboken'}\ (Hotel)\  \Join\ Booking )\ \Join\ Guest) $$
+
+3. Return the name and address of the hotels whose price of suite rooms (i.e., type=’suite’) is more than \$1,000.
+
+$$ \pi_{hName,\ hAddress}\ (\sigma_{price>1000\ \wedge\ type='suite'}\ (Room))\ \Join\ (Hotel) $$ 
+
+4. Return the name of the guests who have booked a hotel room in NYC in Septmeber, 2022 (i.e., fromDate<10/1/2022 and fromDate>08/31/2022)
+
+$$ \pi_{gName}\ (\sigma_{hCity='NYC'\ \wedge\ fromDate\ <\ 10/1/2022\ \wedge\ fromDate\ >\ 08/31/2022}\ (Hotel \Join Booking)) \Join (Guest)$$
+
+5. Return the name and address of the guests who have booked at a NYC hotel in either January 2022 or May 2022.
+
+$$ \pi_{gName,\ gAddress}\ \sigma_{(fromDate\ >=\ 1/1/2022\ \wedge\ fromDate\ <=\ 1/31/2022)\ \vee\ (fromDate\ >=\ 5/1/2022\ \wedge\ fromDate\ <=\ 5/31/2022)}(Booking)\ \Join\ \sigma_{hCity='NYC}(Hotel)\Join(Guest) $$
+
+6. Return the name of the guests who have booked a suite hotel room (i.e., type=’suite’) in NYC for longer than 5 days.
+
+$$ \pi_{gName}\ (\sigma_{type='suite'}\ (Room) \Join \sigma_{hCity='NYC'} (Hotel)\Join      \sigma_{noOfDays\ >\ 5}\ (Booking)     )\Join (Guest) $$ 
+
+7. Return the name and address of the hotels that have no guest booking from January 1, 2022 to March 31, 2022.
+
+$$
+\pi_{hName,\ hAddress}\ (Hotel)  - \pi_{hName,\ hAddress}\ (\sigma_{fromDate\ >=\ 1/1/2022\ \wedge\ fromDate\ <=\ 3/31/2022}\ (Booking)\ \Join\ (Hotel))
+$$
+
+
+8. Return the name of the guests who never booked a hotel room for longer than 3 days.
+$$
+\pi_{gName}\ (Guest) - \pi_{gName}\ (\sigma_{noOfDays\ >\ 3}\ (Booking)\ \Join\ (Guest))
+$$
+
+9. Return the name of the guests who have booked a suite room in all NYC hotels.
+
+$$
+\pi_{gName}\ (\sigma_{type='suite'}\ (Room)\ \Join\ (\sigma_{hCity='NYC'}\ (Hotel)\ \Join\ (Booking))\ \Join\ (Guest))
+$$
+
+10. Return the name of the guests who have booked more than one hotel room on January 1, 2022.
+
+$$
+\rho(R, \pi_{gId,\ hId,\ gName}\ (\sigma_{fromDate=1/1/2022}\ (Booking)))\ \Join\ (Guest)
+$$
+
+$$
+\rho(RPairs, (1 \rightarrow gId1,\ 2 \rightarrow hId1,\ 3 \rightarrow gName1,\ 4 \rightarrow gId2,\ 5 \rightarrow hId2,\ 6 \rightarrow gName2),R \Join_{gId=gId2}R)
+$$
+
+$$ \pi_{gName1}\ \sigma_{hId1 \neq hId2}(RPairs) $$

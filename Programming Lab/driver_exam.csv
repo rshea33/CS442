@@ -1,0 +1,13 @@
+driver_ssn,driver_name,exam_date,exam_type,exam_score
+11111111,"Bob Smith",2017-05-25,D,79
+11111111,"Bob Smith",2017-12-02,L,67
+22222222,"John Walters",2016-05-06,L,25
+22222222,"John Walters",2016-06-10,L,51
+22222222,"John Walters",2016-08-29,D,81
+33333333,"Troy Rops",2017-07-07,L,45
+33333333,"Troy Rops",2017-06-27,L,49
+33333333,"Troy Rops",2017-07-27,L,61
+44444444,"Kevin Mark",2017-07-27,L,71
+44444444,"Kevin Mark",2019-04-10,D,80
+44444444,"Kevin Mark",2017-08-30,L,65
+44444444,"Kevin Mark",2017-09-01,L,82
